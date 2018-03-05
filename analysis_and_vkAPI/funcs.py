@@ -68,7 +68,7 @@ def analyseFrequency(wordList):
             frequency[word] = 1
     analysed = sorted(frequency.items(), key=lambda item: item[1], reverse=True)
     result = analysed[0:3]
-    return result
+    return '{}'.format([' '.join([i[0] for i in result])])
 
 
 if __name__ == '__main__':

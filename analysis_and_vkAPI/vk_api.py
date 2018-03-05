@@ -8,19 +8,25 @@ def vkRequestBuilder(method, **kwargs):
     :param kwargs: arguments of the current method
     :return:
     """
+    # form the link of the request
     api_request = 'https://api.vk.com/method/' + method + '?'
+    # add parameters
     api_request += '&'.join(['{}={}'.format(key, kwargs[key]) for key in kwargs])
     return json.loads(requests.get(api_request).text)
 
 
 def getGroupDescription(ids):
+    """
+    :param ids: string of the format '1,2,3' containing ids of the group
+    :return: dictionary of the format (group, description) if description is not empty
+    """
+    # send the request
     link = vkRequestBuilder('groups.getById', group_ids=ids, fields='description', v=5.73)
+    #receive the response
     link = link['response']
-    print(link)
     groupDescr = {}
-    print(len(link))
     for grp in link:
-        if 'desription' in grp:
+        if 'description' in grp:
             if grp['description']:
                 groupDescr[grp['name']] = grp['description']
     return groupDescr
@@ -29,10 +35,7 @@ def getGroupDescription(ids):
 if __name__ == '__main__':
     var = vkRequestBuilder('users.get', user_id=57636259, v=5.73)
     print(var)
-    # var = json.loads(var)
-    # print(var)
-    # ids = ','.join([str(i) for i in range(1, 3)])
-    group = getGroupDescription(1)
-    print(group)
-    for k, v in group.items():
+    ids = ','.join([str(i) for i in range(1, 10)])
+    g = getGroupDescription(ids)
+    for k, v in g.items():
         print(k, ':::::::', v)
